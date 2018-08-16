@@ -16,7 +16,7 @@ public class BooksDbHelper extends SQLiteOpenHelper {
 
     //Constructor to create new class instance
 
-    public BooksDbHelper(Context context){
+    public BooksDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

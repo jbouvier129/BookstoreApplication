@@ -6,8 +6,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.bookstoreapplication.data.BooksContract.BooksEntry;
 import com.example.android.bookstoreapplication.data.BooksDbHelper;
@@ -102,5 +105,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void deleteEntries() {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        String deleteEntries = "DELETE FROM " + BooksEntry.TABLE_NAME;
+        db.execSQL(deleteEntries);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu options from the res/menu/menu_catalog.xml file.
+        // This adds menu items to the app bar.
+        getMenuInflater().inflate(R.menu.menu_main_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //if user selects delete all from overflow do the below
+        if (item.getItemId() == R.id.delete_all_entries) {
+            // delete all items logic. THIS IS A TRIAL AND NOT REQUIRED
+            deleteEntries();
+            Toast.makeText(this, "This is a trial at deletion, not required!", Toast.LENGTH_SHORT).show();
+            showInventory();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }
