@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Bookstore Application</string>
+
+    <!--Inventory editor strings-->
+    <string name="product_name">Product</string>
+    <string name="price">Price</string>
+    <string name="price_hint">123</string>
+    <string name="quantity">Quantity</string>
+    <string name="quantity_hint">123</string>
+    <string name="supplier">Supplier</string>
+    <string name="supplier_phone">Supplier Phone Number</string>
+    <string name="phone_hint">###-###-####</string>
+
+    <!--Inventory Overflow Strings-->
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+
 </resources>

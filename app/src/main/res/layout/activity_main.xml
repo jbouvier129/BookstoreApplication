@@ -11,7 +11,7 @@
         android:id="@+id/store_inventory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"/>
+        android:padding="@dimen/main_text_padding" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -21,6 +21,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         app:srcCompat="@drawable/add"
-        android:layout_margin="16dp"/>
+        android:layout_margin="@dimen/fab_margin" />
 
 </RelativeLayout>

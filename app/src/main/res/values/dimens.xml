@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="editor_layout_width">0dp</dimen>
+    <dimen name="editor_parent_padding">16dp</dimen>
+    <dimen name="main_text_padding">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+</resources>
