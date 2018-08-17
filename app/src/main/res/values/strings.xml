@@ -11,8 +11,11 @@
     <string name="supplier_phone">Supplier Phone Number</string>
     <string name="phone_hint">###-###-####</string>
 
-    <!--Inventory Overflow Strings-->
+    <!--Inventory Editor Overflow Strings-->
     <string name="save">Save</string>
     <string name="delete">Delete</string>
+
+    <!--Main Activity Overflow Strings-->
+    <string name="delete_all">Delete All Entries</string>
 
 </resources>
