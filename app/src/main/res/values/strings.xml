@@ -18,4 +18,8 @@
     <!--Main Activity Overflow Strings-->
     <string name="delete_all">Delete All Entries</string>
 
+    <!--Toast Strings-->
+    <string name="insert_failed">Failed to insert product</string>
+    <string name="insert_successful">Product inserted successfully</string>
+
 </resources>

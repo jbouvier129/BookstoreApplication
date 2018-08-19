@@ -46,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
     //Helper method to populate TextView with inventory data
     private void showInventory() {
-        //Create/open readable version of inventory.db
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         //projection parameters
         String[] projection = {
@@ -58,16 +56,9 @@ public class MainActivity extends AppCompatActivity {
                 BooksEntry.COLUMN_SUPPLIER_NAME,
                 BooksEntry.COLUMN_SUPPLIER_PHONE_NUMBER
         };
-        //Select query
-        Cursor cursor = db.query(
-                BooksEntry.TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                null
-        );
+
+        Cursor cursor = getContentResolver().query(BooksEntry.CONTENT_URI, projection, null, null, null);
+
         //Create view to display cursor results
         TextView cursorView = findViewById(R.id.store_inventory);
 

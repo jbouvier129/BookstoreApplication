@@ -2,6 +2,7 @@ package com.example.android.bookstoreapplication;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -62,11 +63,11 @@ public class InventoryEditor extends AppCompatActivity {
         values.put(BooksEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
 
         //insert and get row _id to display on successful insert
-        long rowId = db.insert(BooksEntry.TABLE_NAME, null, values);
-        if (rowId == -1) {
-            Toast.makeText(this, "Error saving product entry", Toast.LENGTH_SHORT).show();
+        Uri newUri = getContentResolver().insert(BooksEntry.CONTENT_URI, values);
+        if (newUri == null) {
+            Toast.makeText(this, getString(R.string.insert_failed), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Product successfully added with id: " + rowId, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.insert_successful), Toast.LENGTH_SHORT).show();
         }
     }
 
