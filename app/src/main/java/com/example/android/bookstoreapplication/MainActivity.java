@@ -1,25 +1,34 @@
 package com.example.android.bookstoreapplication;
 
+import android.app.AlertDialog;
+import android.app.LoaderManager;
+import android.content.ContentUris;
+import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.android.bookstoreapplication.data.BooksContract.BooksEntry;
-import com.example.android.bookstoreapplication.data.BooksDbHelper;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    //variable to access inventory db
-    private BooksDbHelper mDbHelper;
+    private static final int INVENTORY_LOADER = 0;
 
+    InventoryCursorAdapter mInventoryCursorAdapter;
+
+    //TODO: Wire up click listener for sales button to update quantity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,71 +44,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mDbHelper = new BooksDbHelper(this);
-    }
+        //find and set empty view for when there is no data
+        ListView inventoryListView = findViewById(R.id.list);
+        View emptyView = findViewById(R.id.empty_view);
+        inventoryListView.setEmptyView(emptyView);
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        showInventory();
-    }
+        //set up the adapter
+        mInventoryCursorAdapter = new InventoryCursorAdapter(this, null);
+        inventoryListView.setAdapter(mInventoryCursorAdapter);
 
-    //Helper method to populate TextView with inventory data
-    private void showInventory() {
+        //set click listener
+        inventoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                //intent to go to inventory editor
+                Intent intent = new Intent(MainActivity.this, InventoryEditor.class);
 
-        //projection parameters
-        String[] projection = {
-                BooksEntry._ID,
-                BooksEntry.COLUMN_PRODUCT_NAME,
-                BooksEntry.COLUMN_PRICE,
-                BooksEntry.COLUMN_QUANTITY,
-                BooksEntry.COLUMN_SUPPLIER_NAME,
-                BooksEntry.COLUMN_SUPPLIER_PHONE_NUMBER
-        };
+                //get the uri for the selected uri
+                Uri currentProductUri = ContentUris.withAppendedId(BooksEntry.CONTENT_URI, id);
 
-        Cursor cursor = getContentResolver().query(BooksEntry.CONTENT_URI, projection, null, null, null);
+                //pass uri for current product (captured above) so that the particular product information is displayed
+                intent.setData(currentProductUri);
 
-        //Create view to display cursor results
-        TextView cursorView = findViewById(R.id.store_inventory);
-
-        try {
-            cursorView.setText("Table is active and has " + cursor.getCount() + " items currently. \n\n");
-            cursorView.append(BooksEntry._ID + " - " +
-                    BooksEntry.COLUMN_PRODUCT_NAME + " - " +
-                    BooksEntry.COLUMN_PRICE + " - " +
-                    BooksEntry.COLUMN_QUANTITY + " - " +
-                    BooksEntry.COLUMN_SUPPLIER_NAME + " - " +
-                    BooksEntry.COLUMN_SUPPLIER_PHONE_NUMBER + "\n"
-
-            );
-            //figure out column indexes then iterate through them so that every result from the query (cursor) is displayed
-            int idIndex = cursor.getColumnIndex(BooksEntry._ID);
-            int productIndex = cursor.getColumnIndex(BooksEntry.COLUMN_PRODUCT_NAME);
-            int priceIndex = cursor.getColumnIndex(BooksEntry.COLUMN_PRICE);
-            int quantityIndex = cursor.getColumnIndex(BooksEntry.COLUMN_QUANTITY);
-            int supplierIndex = cursor.getColumnIndex(BooksEntry.COLUMN_SUPPLIER_NAME);
-            int supplierPhoneNumberIndex = cursor.getColumnIndex(BooksEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
-
-            while (cursor.moveToNext()) {
-                int currentId = cursor.getInt(idIndex);
-                String currentProduct = cursor.getString(productIndex);
-                int currentPrice = cursor.getInt(priceIndex);
-                int currentQuantity = cursor.getInt(quantityIndex);
-                String currentSupplier = cursor.getString(supplierIndex);
-                String currentSupplierPhoneNumber = cursor.getString(supplierPhoneNumberIndex);
-
-                cursorView.append("\n" + currentId + " - " + currentProduct + " - " + currentPrice + " - " +
-                        currentQuantity + " - " + currentSupplier + " - " + currentSupplierPhoneNumber);
+                //launch Inventory Editor passing the uri for the current product
+                startActivity(intent);
             }
-        } finally {
-            cursor.close();
-        }
+        });
+
+        //start loader
+        getLoaderManager().initLoader(INVENTORY_LOADER, null, this);
     }
 
     private void deleteEntries() {
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        String deleteEntries = "DELETE FROM " + BooksEntry.TABLE_NAME;
-        db.execSQL(deleteEntries);
+        int rowDeleted = getContentResolver().delete(BooksEntry.CONTENT_URI, null, null);
+        if (rowDeleted == 0) {
+            Toast.makeText(this, "Failed to Delete Products", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Successfully Deleted Products", Toast.LENGTH_SHORT).show();
+        }
+        Log.v("MainActivity", rowDeleted + " rows deleted from database");
     }
 
     @Override
@@ -115,12 +98,56 @@ public class MainActivity extends AppCompatActivity {
         //if user selects delete all from overflow do the below
         if (item.getItemId() == R.id.delete_all_entries) {
             // delete all items logic. THIS IS A TRIAL AND NOT REQUIRED
-            deleteEntries();
-            Toast.makeText(this, "This is a trial at deletion, not required!", Toast.LENGTH_SHORT).show();
-            showInventory();
+            showDeleteConfirmationDialog();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = {
+                BooksEntry._ID,
+                BooksEntry.COLUMN_PRODUCT_NAME,
+                BooksEntry.COLUMN_PRICE,
+                BooksEntry.COLUMN_QUANTITY
+        };
+
+        return new CursorLoader(this, BooksEntry.CONTENT_URI, projection, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mInventoryCursorAdapter.swapCursor(data);
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mInventoryCursorAdapter.swapCursor(null);
+
+    }
+
+    private void showDeleteConfirmationDialog() {
+        //confirm user wants to delete the entry(ies)
+        AlertDialog.Builder deleteDialog = new AlertDialog.Builder(this);
+        deleteDialog.setMessage("Are you sure you want to delete this product(s)?");
+        deleteDialog.setPositiveButton("Confirm Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteEntries();
+            }
+        });
+        deleteDialog.setNegativeButton("Go Back", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        AlertDialog alertDialog = deleteDialog.create();
+        alertDialog.show();
+
+    }
 }

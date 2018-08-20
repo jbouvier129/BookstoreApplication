@@ -31,6 +31,7 @@ public final class BooksContract {
         //Table Name, Product Name Column, Price Column, Quantity Column, Supplier Name Column and
         // Supplier Phone Number column constants
         public final static String TABLE_NAME = "books";
+        public final static String _ID = BaseColumns._ID;
         public final static String COLUMN_PRODUCT_NAME = "Product";
         public final static String COLUMN_PRICE = "Price";
         public final static String COLUMN_QUANTITY = "Quantity";

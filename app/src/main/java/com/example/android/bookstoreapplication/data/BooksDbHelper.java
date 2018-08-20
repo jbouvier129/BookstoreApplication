@@ -37,6 +37,6 @@ public class BooksDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //DO NOTHING, NOT REQUIRED YET
+        //DO NOTHING, NOT REQUIRED
     }
 }

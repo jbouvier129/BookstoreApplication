@@ -73,6 +73,8 @@ public class InventoryProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot query this URI: " + uri);
         }
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
         return cursor;
     }
 
@@ -141,6 +143,8 @@ public class InventoryProvider extends ContentProvider {
             Log.e(LOG_TAG, "Failed to insert row for " + uri + " uri");
             return null;
         }
+
+        getContext().getContentResolver().notifyChange(uri, null);
 
         return ContentUris.withAppendedId(uri, id);
     }
@@ -218,7 +222,12 @@ public class InventoryProvider extends ContentProvider {
             return 0;
         }
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        return db.update(BooksEntry.TABLE_NAME, values, selection, selectionArgs);
+        int rowUpdated = db.update(BooksEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        if (rowUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowUpdated;
     }
 
     //delete using parameters
@@ -226,19 +235,27 @@ public class InventoryProvider extends ContentProvider {
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
+        int rowDeleted;
+
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case INVENTORY:
-                return db.delete(BooksEntry.TABLE_NAME, selection, selectionArgs);
+                rowDeleted = db.delete(BooksEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             case INVENTORY_ID:
                 selection = BooksEntry._ID + "=?";
                 selectionArgs = new String[]{
                         String.valueOf(ContentUris.parseId(uri))
                 };
-                return db.delete(BooksEntry.TABLE_NAME, selection, selectionArgs);
+                rowDeleted = db.delete(BooksEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Deletion is not support for " + uri + " uri");
         }
+        if (rowDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowDeleted;
     }
 
     //return data type gtom uti

@@ -8,7 +8,7 @@
         android:id="@+id/save"
         android:title="@string/save"
         app:showAsAction="always"
-        android:src="@drawable/save"/>
+        android:icon="@drawable/save" />
 
     <item
         android:id="@+id/delete"
