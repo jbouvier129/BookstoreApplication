@@ -63,6 +63,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
         quantityTextView.setText(quantityDisplay);
 
 
+        //Click listener has to be populated in the adapter. Causes failure if placed in the activity because it may not exist yet
         //call sales decrease in Main activity when the sales button is pressed. Passing product id and quantity
         saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
