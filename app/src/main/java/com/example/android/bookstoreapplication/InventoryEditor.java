@@ -27,7 +27,7 @@ import com.example.android.bookstoreapplication.data.BooksContract.BooksEntry;
 public class InventoryEditor extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int EXISTING_INVENTORY_LOADER = 0;
-    int displayQuantity = 0;
+    public int displayQuantity = 0;
 
     private Uri mCurrentProductUri;
 
@@ -116,6 +116,16 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
                 showDeleteConfirmationDialog();
             }
         });
+
+        Button contactButton = findViewById(R.id.editor_contact_supplier);
+
+        //set click listener for contact button
+        contactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                contactSupplier();
+            }
+        });
     }
 
     private void insertProduct() {
@@ -137,7 +147,7 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
             return;
         }
         if (quantity < 0) {
-            Toast.makeText(this, "Cannot have a negative quantity", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.editor_no_negative), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -162,9 +172,9 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
             int rowsUpdated = getContentResolver().update(mCurrentProductUri, values, null, null);
 
             if (rowsUpdated == 0) {
-                Toast.makeText(this, "Failed to update products", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.update_failure), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Update Successful", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.update_successful), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -353,7 +363,6 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
 
     //method to decrease inventory and update database quantity on save then return to main view
     private void decreaseInventory() {
-        //TODO:Get uri to determine if button operation should be allowed. If not display toast to add inventory. If so allow update displayQuantity view then update product with this number
         //get quantity and update displayQuantity view
         if (mCurrentProductUri == null) {
             Toast.makeText(this, getString(R.string.editor_add_product_warning), Toast.LENGTH_SHORT).show();
@@ -362,14 +371,10 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
             displayQuantity(displayQuantity);
 
         }
-
-        //TODO: Modify insert/update statement to take in the value of the quantity view as a parameter and update
-
     }
 
     //method to increase inventory and update database quantity on save then return to main view
     private void increaseInventory() {
-        //TODO:Get uri to determine if button operation should be allowed. If not display toast to add inventory. If so allow update displayQuantity view then update product with this number
 
         if (mCurrentProductUri == null) {
             Toast.makeText(this, getString(R.string.editor_add_product_warning), Toast.LENGTH_SHORT).show();
@@ -379,8 +384,18 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
 
         }
 
-        //TODO: Modify insert/update statement to take in the value of the quantity view as a parameter and update
+    }
 
+    private void contactSupplier() {
+        if (mCurrentProductUri == null) {
+            Toast.makeText(this, getString(R.string.no_supplier), Toast.LENGTH_SHORT).show();
+        } else {
+            String supplierContact = mSupplierPhoneNumberField.getText().toString();
+            String contactString = "tel:" + supplierContact;
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse(contactString));
+            startActivity(callIntent);
+        }
     }
 
     //get and stock inventory change amount field and update according to which button is pressed.

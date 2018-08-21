@@ -3,6 +3,7 @@ package com.example.android.bookstoreapplication;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     InventoryCursorAdapter mInventoryCursorAdapter;
 
-    //TODO: Wire up click listener for sales button to update quantity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         //start loader
         getLoaderManager().initLoader(INVENTORY_LOADER, null, this);
+
     }
 
     private void deleteEntries() {
@@ -149,5 +150,24 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         AlertDialog alertDialog = deleteDialog.create();
         alertDialog.show();
 
+    }
+
+    //Sales decrease quantity. This is called from the on click action for the sale button in the adapter
+    public void salesDecrease(int currentQuantity, int currentProductId) {
+        currentQuantity -= 1;
+        if (currentQuantity < 0) {
+            Toast.makeText(this, getString(R.string.no_negatives), Toast.LENGTH_SHORT).show();
+        } else {
+            ContentValues values = new ContentValues();
+            values.put(BooksEntry.COLUMN_QUANTITY, currentQuantity);
+
+            Uri newUri = ContentUris.withAppendedId(BooksEntry.CONTENT_URI, currentProductId);
+            int rowUpdated = getContentResolver().update(newUri, values, null, null);
+            if (rowUpdated == 0) {
+                Toast.makeText(this, getString(R.string.sell_fail), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.successful_sale), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

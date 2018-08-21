@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
@@ -28,22 +29,25 @@ public class InventoryCursorAdapter extends CursorAdapter {
 
     //bind (populate) data into the blank view created by newView()
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
 
         //find views needed to complete the listview
         TextView productNameTextView = view.findViewById(R.id.product_name_text_view);
         TextView priceTextView = view.findViewById(R.id.price_text_view);
         TextView quantityTextView = view.findViewById(R.id.quantity_text_view);
+        Button saleButton = view.findViewById(R.id.sale_button);
 
         //get column index for items specified in the listview
+        int idColumnIndex = cursor.getColumnIndex(BooksEntry._ID);
         int productNameIndex = cursor.getColumnIndex(BooksEntry.COLUMN_PRODUCT_NAME);
         int priceIndex = cursor.getColumnIndex(BooksEntry.COLUMN_PRICE);
         int quantityIndex = cursor.getColumnIndex(BooksEntry.COLUMN_QUANTITY);
 
         //get data for specified(current) list item(product)
+        final int id = cursor.getInt(idColumnIndex);
         String productName = cursor.getString(productNameIndex);
         int price = cursor.getInt(priceIndex);
-        int quantity = cursor.getInt(quantityIndex);
+        final int quantity = cursor.getInt(quantityIndex);
 
         //convert int values to strings for text views
         String priceAsString = Integer.toString(price);
@@ -58,5 +62,16 @@ public class InventoryCursorAdapter extends CursorAdapter {
         priceTextView.setText(priceDisplay);
         quantityTextView.setText(quantityDisplay);
 
+
+        //call sales decrease in Main activity when the sales button is pressed. Passing product id and quantity
+        saleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity Sale = (MainActivity) context;
+                int currentQuantity = quantity;
+                int currentProductId = id;
+                Sale.salesDecrease(currentQuantity, currentProductId);
+            }
+        });
     }
 }

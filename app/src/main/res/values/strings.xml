@@ -21,9 +21,16 @@
     <!--Toast Strings-->
     <string name="insert_failed">Failed to insert product</string>
     <string name="insert_successful">Product inserted successfully</string>
+    <string name="update_successful">Product successfully updated</string>
+    <string name="update_failure">Failed to update product</string>
     <string name="delete_failed">Failed to delete product</string>
     <string name="delete_successful">Product deleted successfully</string>
     <string name="editor_add_product_warning">Cannot change quantity of a product that does not exist. Please add the product first.</string>
+    <string name="no_negatives">Cannot have negative quantity. Please select another product.</string>
+    <string name="sell_fail">Failed to sell product</string>
+    <string name="successful_sale">Sale Successful</string>
+    <string name="editor_no_negative">Cannot have a negative quantity</string>
+    <string name="no_supplier">Product does not exist. No supplier.</string>
 
     <!--Empty View String-->
     <string name="empty_view_text">Looks like there is no product data.</string>
@@ -39,10 +46,12 @@
     <!--Main Activity button string-->
     <string name="sale">Sale</string>
 
+
     <!--Inventory Editor Button Text-->
 
     <string name="increase">+</string>
     <string name="decrease">-</string>
     <string name="delete_product">Delete Product</string>
+    <string name="editor_contact_supplier">Contact Supplier</string>
 
 </resources>
