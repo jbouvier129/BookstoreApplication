@@ -142,12 +142,13 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
         int quantity = Integer.parseInt(quantityAsString);
         quantity = quantity + displayQuantity;
 
-        if (mCurrentProductUri == null && TextUtils.isEmpty(productName) && TextUtils.isEmpty(priceAsString) &&
-                TextUtils.isEmpty(quantityAsString) && TextUtils.isEmpty(supplierName) && TextUtils.isEmpty(supplierPhoneNumber)) {
+        if (TextUtils.isEmpty(productName) || TextUtils.isEmpty(priceAsString) ||
+                TextUtils.isEmpty(quantityAsString) || TextUtils.isEmpty(supplierName) || TextUtils.isEmpty(supplierPhoneNumber)) {
+            Toast.makeText(this, getString(R.string.missing_value), Toast.LENGTH_LONG).show();
             return;
         }
         if (quantity < 0) {
-            Toast.makeText(this, getString(R.string.editor_no_negative), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.editor_no_negative), Toast.LENGTH_LONG).show();
             return;
         }
 

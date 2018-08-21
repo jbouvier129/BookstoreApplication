@@ -31,6 +31,7 @@
     <string name="successful_sale">Sale Successful</string>
     <string name="editor_no_negative">Cannot have a negative quantity</string>
     <string name="no_supplier">Product does not exist. No supplier.</string>
+    <string name="missing_value">All fields must have a value to save</string>
 
     <!--Empty View String-->
     <string name="empty_view_text">Looks like there is no product data.</string>
