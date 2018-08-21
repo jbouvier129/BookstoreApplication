@@ -21,6 +21,9 @@
     <!--Toast Strings-->
     <string name="insert_failed">Failed to insert product</string>
     <string name="insert_successful">Product inserted successfully</string>
+    <string name="delete_failed">Failed to delete product</string>
+    <string name="delete_successful">Product deleted successfully</string>
+    <string name="editor_add_product_warning">Cannot change quantity of a product that does not exist. Please add the product first.</string>
 
     <!--Empty View String-->
     <string name="empty_view_text">Looks like there is no product data.</string>
@@ -29,8 +32,17 @@
     <!--labels for Inventory Editor-->
     <string name="add_product">Add a Product</string>
     <string name="edit_product">Edit Product</string>
+    <string name="product_details">Product Details</string>
+    <string name="stock_control_label">Inventory Control</string>
+    <string name="stock_control_label_two">Increase or decrease by one. Please use above editor for large updates.</string>
 
-    <!--button string-->
+    <!--Main Activity button string-->
     <string name="sale">Sale</string>
+
+    <!--Inventory Editor Button Text-->
+
+    <string name="increase">+</string>
+    <string name="decrease">-</string>
+    <string name="delete_product">Delete Product</string>
 
 </resources>

@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/textColor"
             android:textSize="@dimen/text_size"
+            android:textStyle="bold"
             tools:text="test" />
 
         <TextView

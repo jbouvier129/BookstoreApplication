@@ -17,7 +17,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.bookstoreapplication.data.BooksContract.BooksEntry;
@@ -25,6 +27,7 @@ import com.example.android.bookstoreapplication.data.BooksContract.BooksEntry;
 public class InventoryEditor extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int EXISTING_INVENTORY_LOADER = 0;
+    int displayQuantity = 0;
 
     private Uri mCurrentProductUri;
 
@@ -77,6 +80,42 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
         mQuantityField.setOnTouchListener(touchListener);
         mSupplierField.setOnTouchListener(touchListener);
         mSupplierPhoneNumberField.setOnTouchListener(touchListener);
+
+        //find decrease button
+        Button decreaseButton = findViewById(R.id.editor_decrease_button);
+
+        //set click listener for decrease button
+        decreaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //execute decreaseInventory method
+                decreaseInventory();
+            }
+        });
+
+        //find increase button
+        Button increaseButton = findViewById(R.id.editor_increase_button);
+
+        //set click listener for increase button
+        increaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //execute increaseInventory method
+                increaseInventory();
+            }
+        });
+
+        //find delete button
+        Button deleteButton = findViewById(R.id.editor_delete_product);
+
+        //set click listener for delete button
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //execute delete functionality
+                showDeleteConfirmationDialog();
+            }
+        });
     }
 
     private void insertProduct() {
@@ -91,9 +130,14 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
         //convert number columns from strings
         int price = Integer.parseInt(priceAsString);
         int quantity = Integer.parseInt(quantityAsString);
+        quantity = quantity + displayQuantity;
 
         if (mCurrentProductUri == null && TextUtils.isEmpty(productName) && TextUtils.isEmpty(priceAsString) &&
                 TextUtils.isEmpty(quantityAsString) && TextUtils.isEmpty(supplierName) && TextUtils.isEmpty(supplierPhoneNumber)) {
+            return;
+        }
+        if (quantity < 0) {
+            Toast.makeText(this, "Cannot have a negative quantity", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -299,11 +343,52 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
             int rowDeleted = getContentResolver().delete(mCurrentProductUri, null, null);
 
             if (rowDeleted == 0) {
-                Toast.makeText(this, "Failed to Delete Product", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.delete_failed), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Successfully Deleted Product", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.delete_successful), Toast.LENGTH_SHORT).show();
             }
         }
         finish();
     }
+
+    //method to decrease inventory and update database quantity on save then return to main view
+    private void decreaseInventory() {
+        //TODO:Get uri to determine if button operation should be allowed. If not display toast to add inventory. If so allow update displayQuantity view then update product with this number
+        //get quantity and update displayQuantity view
+        if (mCurrentProductUri == null) {
+            Toast.makeText(this, getString(R.string.editor_add_product_warning), Toast.LENGTH_SHORT).show();
+        } else {
+            displayQuantity -= 1;
+            displayQuantity(displayQuantity);
+
+        }
+
+        //TODO: Modify insert/update statement to take in the value of the quantity view as a parameter and update
+
+    }
+
+    //method to increase inventory and update database quantity on save then return to main view
+    private void increaseInventory() {
+        //TODO:Get uri to determine if button operation should be allowed. If not display toast to add inventory. If so allow update displayQuantity view then update product with this number
+
+        if (mCurrentProductUri == null) {
+            Toast.makeText(this, getString(R.string.editor_add_product_warning), Toast.LENGTH_SHORT).show();
+        } else {
+            displayQuantity += 1;
+            displayQuantity(displayQuantity);
+
+        }
+
+        //TODO: Modify insert/update statement to take in the value of the quantity view as a parameter and update
+
+    }
+
+    //get and stock inventory change amount field and update according to which button is pressed.
+    private void displayQuantity(int displayQuantity) {
+        TextView stockChange = findViewById(R.id.stock_change_text_view);
+        String quantityToChange = "" + displayQuantity;
+        stockChange.setText(quantityToChange);
+
+    }
+
 }

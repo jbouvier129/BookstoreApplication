@@ -7,6 +7,17 @@
     android:padding="@dimen/editor_parent_padding"
     tools:context=".InventoryEditor">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/main_text_padding"
+        android:layout_marginTop="@dimen/main_text_padding"
+        android:gravity="center"
+        android:text="@string/product_details"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold" />
+
 
     <!--Input Fields Layout: Product Name, Price, Quantity, Supplier Name, Supplier Phone Number-->
 
@@ -128,6 +139,89 @@
             android:hint="@string/phone_hint"
             android:inputType="phone"
             android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/textColor" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="@dimen/main_text_padding"
+        android:layout_marginTop="@dimen/main_text_padding"
+        android:background="@android:color/black" />
+
+    <TextView
+        android:id="@+id/stock_control_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/main_text_padding"
+        android:gravity="center"
+        android:text="@string/stock_control_label"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/stock_control_label_two"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/note_text_size" />
+
+    <LinearLayout
+        android:id="@+id/stock_control_button_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/main_text_padding">
+
+        <Button
+            android:id="@+id/editor_decrease_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" - "
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:id="@+id/stock_change_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/main_text_padding"
+            android:layout_marginRight="@dimen/main_text_padding"
+            android:text="0"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/text_size" />
+
+        <Button
+            android:id="@+id/editor_increase_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" + "
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/text_size" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/black" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/editor_delete_product"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/main_text_padding"
+            android:text="@string/delete_product"
             android:textColor="@color/textColor" />
 
     </LinearLayout>
