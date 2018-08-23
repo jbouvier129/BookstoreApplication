@@ -19,12 +19,12 @@
     <string name="delete_all">Delete All Entries</string>
 
     <!--Toast Strings-->
-    <string name="insert_failed">Failed to insert product</string>
+    <string name="insert_failed">Failed to insert product. Please make sure all fields are filled in completely</string>
     <string name="insert_successful">Product inserted successfully</string>
     <string name="update_successful">Product successfully updated</string>
     <string name="update_failure">Failed to update product</string>
     <string name="delete_failed">Failed to delete product</string>
-    <string name="delete_successful">Product deleted successfully</string>
+    <string name="delete_successful">Product(s) deleted successfully</string>
     <string name="editor_add_product_warning">Cannot change quantity of a product that does not exist. Please add the product first.</string>
     <string name="no_negatives">Cannot have negative quantity. Please select another product.</string>
     <string name="sell_fail">Failed to sell product</string>
@@ -32,6 +32,16 @@
     <string name="editor_no_negative">Cannot have a negative quantity</string>
     <string name="no_supplier">Product does not exist. No supplier.</string>
     <string name="missing_value">All fields must have a value to save</string>
+    <string name="show_unsaved_one">You have unsaved changes</string>
+    <string name="show_unsaved_two">Confirm to continue without saving</string>
+    <string name="show_unsaved_three">Go back to save</string>
+    <string name="confirmDelete">Are you sure you want to delete this product(s)?</string>
+    <string name="name_required">Product name is required</string>
+    <string name="price_required">Price is required</string>
+    <string name="number_required">Value must be a positive number</string>
+    <string name="quantity_required">Quantity is required</string>
+    <string name="supplier_required">Supplier is required</string>
+    <string name="supplier_phone_required">Supplier phone number is required</string>
 
     <!--Empty View String-->
     <string name="empty_view_text">Looks like there is no product data.</string>

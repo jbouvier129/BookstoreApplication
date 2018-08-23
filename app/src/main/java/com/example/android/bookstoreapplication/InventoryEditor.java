@@ -137,16 +137,17 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
         String supplierName = mSupplierField.getText().toString().trim();
         String supplierPhoneNumber = mSupplierPhoneNumberField.getText().toString().trim();
 
-        //convert number columns from strings
-        int price = Integer.parseInt(priceAsString);
-        int quantity = Integer.parseInt(quantityAsString);
-        quantity = quantity + displayQuantity;
-
         if (TextUtils.isEmpty(productName) || TextUtils.isEmpty(priceAsString) ||
                 TextUtils.isEmpty(quantityAsString) || TextUtils.isEmpty(supplierName) || TextUtils.isEmpty(supplierPhoneNumber)) {
             Toast.makeText(this, getString(R.string.missing_value), Toast.LENGTH_LONG).show();
             return;
         }
+
+        //convert number columns from strings
+        int price = Integer.parseInt(priceAsString);
+        int quantity = Integer.parseInt(quantityAsString);
+        quantity = quantity + displayQuantity;
+
         if (quantity < 0) {
             Toast.makeText(this, getString(R.string.editor_no_negative), Toast.LENGTH_LONG).show();
             return;
@@ -168,6 +169,7 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
                 Toast.makeText(this, getString(R.string.insert_failed), Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, getString(R.string.insert_successful), Toast.LENGTH_SHORT).show();
+                finish();
             }
         } else {
             int rowsUpdated = getContentResolver().update(mCurrentProductUri, values, null, null);
@@ -176,6 +178,7 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
                 Toast.makeText(this, getString(R.string.update_failure), Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, getString(R.string.update_successful), Toast.LENGTH_SHORT).show();
+                finish();
             }
         }
     }
@@ -204,7 +207,6 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
         switch (item.getItemId()) {
             case R.id.save:
                 insertProduct();
-                finish();
                 return true;
             case R.id.delete:
                 //make sure user wants to delete the item
@@ -311,7 +313,8 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
     private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener) {
         //Create dialog and listener for accept or cancel
         AlertDialog.Builder unsavedDialog = new AlertDialog.Builder(this);
-        unsavedDialog.setMessage("You have unsaved changes. \nConfirm to continue \n Go back to save");
+        String unsavedMessage = getString(R.string.show_unsaved_one) + "\n" + getString(R.string.show_unsaved_two) + "\n" + getString(R.string.show_unsaved_three);
+        unsavedDialog.setMessage(unsavedMessage);
         unsavedDialog.setPositiveButton("Confirm", discardButtonClickListener);
         unsavedDialog.setNegativeButton("Go Back", new DialogInterface.OnClickListener() {
             @Override
@@ -328,7 +331,7 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
     private void showDeleteConfirmationDialog() {
         //confirm user wants to delete the entry(ies)
         AlertDialog.Builder deleteDialog = new AlertDialog.Builder(this);
-        deleteDialog.setMessage("Are you sure you want to delete this product(s)?");
+        deleteDialog.setMessage(getString(R.string.confirmDelete));
         deleteDialog.setPositiveButton("Confirm Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -402,7 +405,7 @@ public class InventoryEditor extends AppCompatActivity implements LoaderManager.
     //get and stock inventory change amount field and update according to which button is pressed.
     private void displayQuantity(int displayQuantity) {
         TextView stockChange = findViewById(R.id.stock_change_text_view);
-        String quantityToChange = "" + displayQuantity;
+        String quantityToChange = Integer.toString(displayQuantity);
         stockChange.setText(quantityToChange);
 
     }

@@ -40,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="text"
+            android:imeOptions="actionDone"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@color/textColor" />
     </LinearLayout>
@@ -64,6 +65,7 @@
             android:layout_weight="1"
             android:hint="@string/price_hint"
             android:inputType="number"
+            android:imeOptions="actionDone"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@color/textColor" />
     </LinearLayout>
@@ -89,6 +91,7 @@
             android:layout_weight="1"
             android:hint="@string/quantity_hint"
             android:inputType="number"
+            android:imeOptions="actionDone"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@color/textColor" />
 
@@ -113,6 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="text"
+            android:imeOptions="actionDone"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@color/textColor" />
 
@@ -138,6 +142,7 @@
             android:layout_weight="1"
             android:hint="@string/phone_hint"
             android:inputType="phone"
+            android:imeOptions="actionDone"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@color/textColor" />
 

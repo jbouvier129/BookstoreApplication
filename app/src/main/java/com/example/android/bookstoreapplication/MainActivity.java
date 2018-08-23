@@ -79,9 +79,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private void deleteEntries() {
         int rowDeleted = getContentResolver().delete(BooksEntry.CONTENT_URI, null, null);
         if (rowDeleted == 0) {
-            Toast.makeText(this, "Failed to Delete Products", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.delete_failed), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Successfully Deleted Products", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.delete_successful), Toast.LENGTH_SHORT).show();
         }
         Log.v("MainActivity", rowDeleted + " rows deleted from database");
     }
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private void showDeleteConfirmationDialog() {
         //confirm user wants to delete the entry(ies)
         AlertDialog.Builder deleteDialog = new AlertDialog.Builder(this);
-        deleteDialog.setMessage("Are you sure you want to delete this product(s)?");
+        deleteDialog.setMessage(getString(R.string.confirmDelete));
         deleteDialog.setPositiveButton("Confirm Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

@@ -3,12 +3,15 @@ package com.example.android.bookstoreapplication.data;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.android.bookstoreapplication.R;
 import com.example.android.bookstoreapplication.data.BooksContract.BooksEntry;
 
 public class InventoryProvider extends ContentProvider {
@@ -71,7 +74,12 @@ public class InventoryProvider extends ContentProvider {
                 break;
 
             default:
-                throw new IllegalArgumentException("Cannot query this URI: " + uri);
+                CharSequence text = "Cannot query this URI: " + uri;
+                Context context = getContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return null;
         }
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
@@ -86,7 +94,13 @@ public class InventoryProvider extends ContentProvider {
             case INVENTORY:
                 return insertInventory(uri, contentValues);
             default:
-                throw new IllegalArgumentException("Insert not allowed from " + uri + " uri.");
+
+                CharSequence text = "Insert not allowed from " + uri + " uri.";
+                Context context = getContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return null;
         }
     }
 
@@ -96,43 +110,83 @@ public class InventoryProvider extends ContentProvider {
         //validate product name has a value
         String name = values.getAsString(BooksEntry.COLUMN_PRODUCT_NAME);
         if (name.isEmpty() || name == null) {
-            throw new IllegalArgumentException("Product requires a name");
+            CharSequence text = Integer.toString(R.string.name_required);
+            Context context = getContext();
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            return null;
         }
 
         //validate price is not a negative number and is actually a number
         int price = values.getAsInteger(BooksEntry.COLUMN_PRICE);
         String priceString = values.getAsInteger(BooksEntry.COLUMN_PRICE).toString();
         if (price < 0) {
-            throw new IllegalArgumentException("Price is required");
+            CharSequence text = Integer.toString(R.string.price_required);
+            Context context = getContext();
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            return null;
         }
         if (!priceString.matches("^[0-9]+$")) {
-            throw new IllegalArgumentException("Price must be a number");
+            CharSequence text = Integer.toString(R.string.number_required);
+            Context context = getContext();
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            return null;
         }
 
         //validate quantity is not a negative number and is actually a number
         int quantity = values.getAsInteger(BooksEntry.COLUMN_QUANTITY);
         String quantityString = values.getAsInteger(BooksEntry.COLUMN_QUANTITY).toString();
         if (quantity < 0) {
-            throw new IllegalArgumentException("Cannot enter negative quantity");
+            CharSequence text = Integer.toString(R.string.quantity_required);
+            Context context = getContext();
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            return null;
         }
         if (!quantityString.matches("^[0-9]+$")) {
-            throw new IllegalArgumentException("Quantity must be a number");
+            CharSequence text = Integer.toString(R.string.number_required);
+            Context context = getContext();
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            return null;
         }
 
         //validate supplier name has a value
         String supplierName = values.getAsString(BooksEntry.COLUMN_SUPPLIER_NAME);
         if (supplierName.isEmpty() || supplierName == null) {
-            throw new IllegalArgumentException("Supplier name is required.");
+            CharSequence text = Integer.toString(R.string.supplier_required);
+            Context context = getContext();
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            return null;
         }
 
         //validate supplier phone number has a value and is 10 or 11 characters in length then validates it is numeric
         String supplierPhoneNumber = values.getAsString(BooksEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
         if (supplierPhoneNumber.isEmpty() || supplierPhoneNumber == null || supplierPhoneNumber.length() < 10
                 || supplierPhoneNumber.length() > 11) {
-            throw new IllegalArgumentException("Phone number is required");
+            CharSequence text = Integer.toString(R.string.supplier_phone_required);
+            Context context = getContext();
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            return null;
         }
         if (!supplierPhoneNumber.matches("^[0-9]+$")) {
-            throw new IllegalArgumentException("Phone number must be numeric");
+            CharSequence text = Integer.toString(R.string.number_required);
+            Context context = getContext();
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            return null;
         }
 
 
@@ -163,7 +217,12 @@ public class InventoryProvider extends ContentProvider {
                 };
                 return updateInventory(uri, contentValues, selection, selectionArgs);
             default:
-                throw new IllegalArgumentException("Update not supported for " + uri + " uri.");
+                CharSequence text = "Update not supported for " + uri + " uri.";
+                Context context = getContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return -1;
         }
     }
 
@@ -171,7 +230,13 @@ public class InventoryProvider extends ContentProvider {
         if (values.containsKey(BooksEntry.COLUMN_PRODUCT_NAME)) {
             String name = values.getAsString(BooksEntry.COLUMN_PRODUCT_NAME);
             if (name.isEmpty() || name == null) {
-                throw new IllegalArgumentException("Product requires a name");
+
+                CharSequence text = Integer.toString(R.string.name_required);
+                Context context = getContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return 0;
             }
         }
 
@@ -179,10 +244,21 @@ public class InventoryProvider extends ContentProvider {
             int price = values.getAsInteger(BooksEntry.COLUMN_PRICE);
             String priceString = values.getAsInteger(BooksEntry.COLUMN_PRICE).toString();
             if (price < 0) {
-                throw new IllegalArgumentException("Price is required");
+
+                CharSequence text = Integer.toString(R.string.price_required);
+                Context context = getContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return 0;
             }
             if (!priceString.matches("^[0-9]+$")) {
-                throw new IllegalArgumentException("Price must be a number");
+                CharSequence text = Integer.toString(R.string.number_required);
+                Context context = getContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return 0;
             }
         }
 
@@ -191,18 +267,33 @@ public class InventoryProvider extends ContentProvider {
             int quantity = values.getAsInteger(BooksEntry.COLUMN_QUANTITY);
             String quantityString = values.getAsInteger(BooksEntry.COLUMN_QUANTITY).toString();
             if (quantity < 0) {
-                throw new IllegalArgumentException("Cannot enter negative quantity");
+                CharSequence text = Integer.toString(R.string.quantity_required);
+                Context context = getContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return 0;
             }
             if (!quantityString.matches("^[0-9]+$")) {
-                throw new IllegalArgumentException("Quantity must be a number");
+                CharSequence text = Integer.toString(R.string.number_required);
+                Context context = getContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return 0;
             }
         }
 
         //validate supplier name has a value
-        if (values.containsKey(BooksEntry.COLUMN_PRICE)) {
+        if (values.containsKey(BooksEntry.COLUMN_SUPPLIER_NAME)) {
             String supplierName = values.getAsString(BooksEntry.COLUMN_SUPPLIER_NAME);
             if (supplierName.isEmpty() || supplierName == null) {
-                throw new IllegalArgumentException("Supplier name is required.");
+                CharSequence text = Integer.toString(R.string.supplier_required);
+                Context context = getContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return 0;
             }
         }
 
@@ -211,10 +302,20 @@ public class InventoryProvider extends ContentProvider {
             String supplierPhoneNumber = values.getAsString(BooksEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
             if (supplierPhoneNumber.isEmpty() || supplierPhoneNumber == null || supplierPhoneNumber.length() < 10
                     || supplierPhoneNumber.length() > 11) {
-                throw new IllegalArgumentException("Phone number is required");
+                CharSequence text = Integer.toString(R.string.supplier_phone_required);
+                Context context = getContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return 0;
             }
             if (!supplierPhoneNumber.matches("^[0-9]+$")) {
-                throw new IllegalArgumentException("Phone number must be numeric");
+                CharSequence text = Integer.toString(R.string.number_required);
+                Context context = getContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return 0;
             }
 
         }
@@ -250,7 +351,12 @@ public class InventoryProvider extends ContentProvider {
                 rowDeleted = db.delete(BooksEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
-                throw new IllegalArgumentException("Deletion is not support for " + uri + " uri");
+                CharSequence text = "Deletion is not supported for " + uri + " uri";
+                Context context = getContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return 0;
         }
         if (rowDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -268,7 +374,12 @@ public class InventoryProvider extends ContentProvider {
             case INVENTORY_ID:
                 return BooksEntry.CONTENT_ITEM_TYPE;
             default:
-                throw new IllegalArgumentException("Unknown uri " + uri + " with match " + match);
+                CharSequence text = "Unknown uri " + uri + " with match " + match;
+                Context context = getContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return null;
         }
     }
 }
